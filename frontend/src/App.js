@@ -82,7 +82,7 @@ function App() {
       console.log("sending to backend:", desc);
       setDescription(desc);
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/api/requirements", {
+      const res = await axios.post("https://ai-app-builder-portal.onrender.com/api/requirements", {
         description: desc,
       });
       console.log("Backend JSON returned:", res.data);
