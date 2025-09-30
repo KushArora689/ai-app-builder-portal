@@ -1,0 +1,326 @@
+
+
+body{
+
+  background-image: url('./images/backg3.png');
+  background-size: cover;
+  background-attachment: fixed; 
+}
+
+
+.app-container {
+  margin-top: 3rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* ===================================== Spinning wheel loading =====================================*/
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.loading-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loading-overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blurred {
+  filter: blur(2px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.3s ease;
+}
+
+.unblurred {
+  filter: blur(0px);
+  transition: filter 0.3s ease;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================== Apple virtual window =====================================*/
+
+.apple-mock-window {
+  margin-top: 2rem;
+  border: 1px solid #ccc;
+  min-height: 60vh;    
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background: #fff;
+  max-width: 100%;
+  margin-bottom: 6rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.apple-mock-window-header {
+  display: flex;
+  align-items: center;
+  background: #f5f5f7;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.apple-mock-dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  display: inline-block;
+}
+
+.apple-mock-dot.red { background: #ff5f57; }
+.apple-mock-dot.yellow { background: #ffbd2e; }
+.apple-mock-dot.green { background: #28c840; }
+
+.apple-mock-title {
+  margin-left: 1rem;
+  font-weight: 500;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.apple-mock-window-content {
+  padding: 1rem;
+}
+
+/* ================================= Content for Apple virtual window =================================*/
+/* ================================= login role =================================*/
+
+.role-login {
+  text-align: center;
+  display: flex;           
+
+  margin: 2rem 0;
+    align-items: center;   
+  flex-direction: column; /* stack buttons vertically */
+min-height: 50vh;
+  justify-content: center; 
+
+}
+
+.role-login h2{
+  margin-bottom: 3rem;
+
+}
+.login-btn {
+  margin: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 100px;
+  background: #6d1fff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.switch-btn {
+  margin: 1rem 0;
+  background: #FF9800;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+
+/* ================================= Content for Apple virtual window =================================*/
+/* ================================= buttons and inputs =================================*/
+
+.form-box input,
+.form-box .btn-primary {
+  max-width: 300px;
+  min-width: 400px;
+  margin: 0 auto;  /* center horizontally */
+}
+
+input[type=text] {
+  border: 2px solid rgb(54, 51, 51);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.page-card h3{
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #333;
+}
+
+
+.role-tabs {
+  margin-bottom: 1.5rem;
+}
+
+.page-card {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.navbar {
+  background: #4957d4;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  border-radius: 6px;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.active {
+  border-bottom: #ccc solid 2px;
+}
+
+
+.role-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: #4957d4;
+  font-weight: bold;
+  color: white;
+}
+
+.btn-primary {
+  background: #3a6da3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+/* ================================= Content for Apple virtual window =================================*/
+/* ================================= table for mock data =================================*/
+
+.page-card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+.page-card thead {
+  background: #f5f7fa;
+}
+
+.page-card th {
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+
+.page-card td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #444;
+}
+
+
+.page-card tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+
+.page-card tbody tr:hover {
+  background: #f0f4ff;
+  transition: background 0.2s ease;
+}
+
+
+.page-card thead tr:first-child th:first-child {
+  border-top-left-radius: 8px;
+}
+.page-card thead tr:first-child th:last-child {
+  border-top-right-radius: 8px;
+}
+
+

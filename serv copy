@@ -1,0 +1,131 @@
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import axios from "axios";
+
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI);
+
+mongoose.connection.once("open", () => {
+  console.log("✅ Connected to MongoDB");
+});
+
+// Schema for requirements (updated to include pages + schema)
+const RequirementSchema = new mongoose.Schema({
+  description: String,
+  appName: String,
+  navbar: [String],
+  pages: [mongoose.Schema.Types.Mixed], // allow any object
+});
+
+const Requirement = mongoose.model("Requirement", RequirementSchema);
+
+app.post("/api/requirements", async (req, res) => {
+  try {
+    const { description } = req.body;
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: `You are an AI that generates app specifications as JSON. 
+
+The user will describe the app in natural language. Your task is to generate a JSON that includes ALL of the following fields:
+
+1. "appName" (string) — the name of the app.
+2. "navbar" (array of strings) — include at least 3 meaningful menu items based on the app description if possible. 
+   - If you cannot generate meaningful navbar items, instead include a single string explaining why it cannot be generated.
+3. "roles" (array of strings) — MUST always exist if the app has multiple user types. If unsure, include ["User"].
+4. "pages" (array of objects) — each page must include:
+   - "name" (string)
+   - "role" (string, can be same as one of the roles)
+   - "type" ("table" or "form")
+   - "columns" (array of strings, required if type is table)
+   - "fields" (array of strings, required if type is form)
+   - "data" (array of arrays, optional mock data for tables)
+
+Example response:
+
+{
+  "appName": "Student Course Management",
+  "navbar": ["Manage Students", "Teacher Login", "Admin Reports"],
+  "roles": ["Teacher", "Student", "Admin"],
+  "pages": [
+    {
+      "name": "Courses",
+      "role": "Teacher",
+      "type": "table",
+      "columns": ["Course ID", "Course Name", "Instructor"],
+      "data": [["1", "Math", "Dr. Smith"], ["2", "Science", "Dr. Johnson"]]
+    },
+    {
+      "name": "Add Course",
+      "role": "Teacher",
+      "type": "form",
+      "fields": ["Course Name", "Instructor"]
+    }
+  ]
+}
+
+⚠️ Always respond with JSON. If you cannot generate a navbar, include the reason as a string inside the "navbar" field.`
+
+
+          },
+          { role: "user", content: description },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    let text = response.data.choices[0].message.content;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+
+      // If pages is a string (extra quotes), parse it again
+      if (parsed.pages && typeof parsed.pages === "string") {
+        parsed.pages = JSON.parse(parsed.pages);
+      }
+
+      // Ensure navbar and roles always exist
+      if (!parsed.navbar || !Array.isArray(parsed.navbar)) parsed.navbar = ["Home", "Dashboard"];
+      if (!parsed.roles || !Array.isArray(parsed.roles)) parsed.roles = ["User"];
+    } catch (jsonErr) {
+      console.error("❌ Failed to parse AI response:", text);
+      return res.status(500).json({ error: "Invalid AI response format" });
+    }
+
+    const saved = await Requirement.create({ description, ...parsed });
+    res.json(saved);
+  } catch (err) {
+    console.error("❌ OpenAI / Server Error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to process requirements" });
+  }
+});
+
+
+// Route: get all saved requirements
+app.get("/api/requirements", async (req, res) => {
+  const list = await Requirement.find();
+  res.json(list);
+});
+
+const PORT = process.env.PORT || 5000;
+console.log("🔑 OpenAI Key loaded?", process.env.OPENAI_API_KEY ? "YES" : "NO");
+app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));

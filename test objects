@@ -1,0 +1,88 @@
+{
+    "description": "I want an app to manage student courses and grades. Teachers add courses, students enrol, and admins manage reports",
+    "appName": "Student Course Management",
+    "navbar": [
+        "Home",
+        "Courses",
+        "Enrollment",
+        "Reports"
+    ],
+    "roles": [
+        "Teacher",
+        "Student",
+        "Admin"
+    ],
+    "pages": [
+        {
+            "name": "Add Course",
+            "role": "Teacher",
+            "type": "form",
+            "fields": [
+                "Course Name",
+                "Course Code",
+                "Credits",
+                "Instructor"
+            ]
+        },
+        {
+            "name": "Enroll Student",
+            "role": "Admin",
+            "type": "form",
+            "fields": [
+                "Student ID",
+                "Course Code",
+                "Enrollment Date"
+            ]
+        },
+        {
+            "name": "Grade Report",
+            "role": "Admin",
+            "type": "table",
+            "columns": [
+                "Student ID",
+                "Course Code",
+                "Grade"
+            ]
+        },
+        {
+            "name": "List Courses",
+            "role": "Teacher",
+            "type": "table",
+            "columns": [
+                "Course Name",
+                "Course Code",
+                "Credits",
+                "Instructor"
+            ]
+        },
+        {
+            "name": "List Enrollments",
+            "role": "Admin",
+            "type": "table",
+            "columns": [
+                "Student ID",
+                "Course Code",
+                "Enrollment Date"
+            ]
+        }
+    ],
+    "navbarPages": {
+        "Home": [
+            "Home Overview"
+        ],
+        "Courses": [
+            "Add Course",
+            "List Courses"
+        ],
+        "Enrollment": [
+            "Enroll Student",
+            "List Enrollments"
+        ],
+        "Reports": [
+            "Grade Report",
+            "Enrollment Statistics"
+        ]
+    },
+    "_id": "68d942659682be9ebb3bc9fb",
+    "__v": 0
+}

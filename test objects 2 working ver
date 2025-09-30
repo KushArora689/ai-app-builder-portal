@@ -1,0 +1,148 @@
+{
+    "description": "I want an app to manage student courses and grades. Teachers add courses, students enrol, and admins manage reports",
+    "appName": "Course and Grade Manager",
+    "navbar": [
+        "Home",
+        "Courses",
+        "Student Enrollment",
+        "Reports"
+    ],
+    "roles": [
+        "Teacher",
+        "Student",
+        "Admin"
+    ],
+    "pages": [
+        {
+            "name": "Add Course",
+            "role": "Teacher",
+            "type": "form",
+            "fields": [
+                "Course Name",
+                "Course Code",
+                "Credits",
+                "Instructor"
+            ]
+        },
+        {
+            "name": "List Courses",
+            "role": "Teacher",
+            "type": "table",
+            "columns": [
+                "Course Name",
+                "Course Code",
+                "Credits",
+                "Instructor"
+            ],
+            "data": [
+                {
+                    "Course Name": "Mathematics",
+                    "Course Code": "MATH101",
+                    "Credits": 3,
+                    "Instructor": "John Doe"
+                },
+                {
+                    "Course Name": "Science",
+                    "Course Code": "SCI101",
+                    "Credits": 4,
+                    "Instructor": "Jane Smith"
+                }
+            ]
+        },
+        {
+            "name": "Enroll Student",
+            "role": "Student",
+            "type": "form",
+            "fields": [
+                "Student Name",
+                "Student ID",
+                "Selected Course"
+            ]
+        },
+        {
+            "name": "Student List",
+            "role": "Admin",
+            "type": "table",
+            "columns": [
+                "Student Name",
+                "Student ID",
+                "Enrolled Courses"
+            ],
+            "data": [
+                {
+                    "Student Name": "Alice Johnson",
+                    "Student ID": "S1001",
+                    "Enrolled Courses": "Mathematics, Science"
+                },
+                {
+                    "Student Name": "Bob Brown",
+                    "Student ID": "S1002",
+                    "Enrolled Courses": "Mathematics"
+                }
+            ]
+        },
+        {
+            "name": "Course Reports",
+            "role": "Admin",
+            "type": "table",
+            "columns": [
+                "Course Name",
+                "Enrolled Students",
+                "Average Grade"
+            ],
+            "data": [
+                {
+                    "Course Name": "Mathematics",
+                    "Enrolled Students": 30,
+                    "Average Grade": "B"
+                },
+                {
+                    "Course Name": "Science",
+                    "Enrolled Students": 25,
+                    "Average Grade": "A"
+                }
+            ]
+        },
+        {
+            "name": "Grade Reports",
+            "role": "Admin",
+            "type": "table",
+            "columns": [
+                "Student Name",
+                "Course Name",
+                "Grade"
+            ],
+            "data": [
+                {
+                    "Student Name": "Alice Johnson",
+                    "Course Name": "Mathematics",
+                    "Grade": "A"
+                },
+                {
+                    "Student Name": "Bob Brown",
+                    "Course Name": "Science",
+                    "Grade": "B"
+                }
+            ]
+        }
+    ],
+    "navbarPages": {
+        "Home": [
+            "Home Overview"
+        ],
+        "Courses": [
+            "Add Course",
+            "List Courses"
+        ],
+        "Student Enrollment": [
+            "Enroll Student",
+            "Student List"
+        ],
+        "Reports": [
+            "Course Reports",
+            "Grade Reports"
+        ]
+    },
+    "_id": "68d947669682be9ebb3bc9ff",
+    "__v": 0
+}

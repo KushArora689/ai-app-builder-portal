@@ -1,0 +1,174 @@
+import React, { useState } from "react";
+import axios from "axios";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  AppBar,
+  Toolbar,
+} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+
+// Component renderer
+function RenderPage({ page }) {
+  if (page.type === "table") {
+    return (
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          {page.name}
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {page.columns.map((col, i) => (
+                <TableCell key={i}>{col}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {page.data?.map((row, i) => (
+              <TableRow key={i}>
+                {row.map((cell, j) => (
+                  <TableCell key={j}>{cell}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
+
+  if (page.type === "form") {
+    return (
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          {page.name}
+        </Typography>
+        <Box
+          component="form"
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          {page.fields.map((field, i) => (
+            <TextField key={i} label={field} variant="outlined" fullWidth />
+          ))}
+          <Button variant="contained">Submit</Button>
+        </Box>
+      </Paper>
+    );
+  }
+
+  return null;
+}
+
+// Navbar component (dynamic)
+function DynamicNavbar({ items }) {
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          AI App Builder
+        </Typography>
+        {items?.map((item, idx) => (
+          <Button key={idx} color="inherit">
+            {item}
+          </Button>
+        ))}
+      </Toolbar>
+    </AppBar>
+  );
+}
+
+function App() {
+  const [description, setDescription] = useState("");
+  const [requirements, setRequirements] = useState(null);
+  const [activeRole, setActiveRole] = useState(0);
+
+  const handleSubmit = async () => {
+  try {
+    const res = await axios.post("http://localhost:5000/api/requirements", {
+      description,
+    });
+    console.log("✅ Backend returned:", res.data); // <-- add this
+    setRequirements(res.data);
+    setActiveRole(0);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+  return (
+    <>
+      {/* Show navbar if requirements include it */}
+      {requirements?.navbar && <DynamicNavbar items={requirements.navbar} />}
+
+      <Container maxWidth="lg" sx={{ mt: 5 }}>
+        <Typography variant="h4" gutterBottom>
+          Build Your App
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+          <TextField
+            fullWidth
+            label="Describe your app"
+            variant="outlined"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleSubmit}>
+            Generate
+          </Button>
+        </Box>
+
+        {requirements && (
+          <>
+            <Typography variant="h5" gutterBottom>
+              {requirements.appName}
+            </Typography>
+
+            {requirements.roles?.length > 0 ? (
+              <>
+                {/* Roles as Tabs */}
+                <Tabs
+                  value={activeRole}
+                  onChange={(e, newValue) => setActiveRole(newValue)}
+                  sx={{ mb: 3 }}
+                >
+                  {requirements.roles.map((role, idx) => (
+                    <Tab key={idx} label={role} />
+                  ))}
+                </Tabs>
+
+                {/* Render pages belonging to active role */}
+                {requirements.pages
+                  ?.filter((p) => p.role === requirements.roles[activeRole])
+                  .map((page, idx) => (
+                    <RenderPage key={idx} page={page} />
+                  ))}
+              </>
+            ) : (
+              <>
+                {/* If no roles, just render all pages */}
+                {requirements.pages?.map((page, idx) => (
+                  <RenderPage key={idx} page={page} />
+                ))}
+              </>
+            )}
+          </>
+        )}
+      </Container>
+    </>
+  );
+}
+
+export default App;
